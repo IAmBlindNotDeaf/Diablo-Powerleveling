@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diablo Powerleveling</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/beercss@3.2.13/dist/cdn/beer.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9ecaff;
+            --on-primary: #003258;
+            --primary-container: #00497d;
+            --on-primary-container: #d1e4ff;
+            --secondary: #bbc7db;
+            --on-secondary: #253140;
+            --secondary-container: #3b4858;
+            --on-secondary-container: #d7e3f7;
+            --tertiary: #d6bee4;
+            --on-tertiary: #3b2948;
+            --tertiary-container: #523f5f;
+            --on-tertiary-container: #f2daff;
+            --error: #ffb4ab;
+            --on-error: #690005;
+            --error-container: #93000a;
+            --on-error-container: #ffb4ab;
+            --background: #1a1c1e;
+            --on-background: #e2e2e6;
+            --surface: #1a1c1e;
+            --on-surface: #e2e2e6;
+            --surface-variant: #43474e;
+            --on-surface-variant: #c3c7cf;
+            --outline: #8d9199;
+            --outline-variant: #43474e;
+            --scrim: #000000;
+            --inverse-surface: #e2e2e6;
+            --inverse-on-surface: #2f3033;
+            --inverse-primary: #0061a4;
+        }
+
+        .field {
+            margin-bottom: 1.5rem;
+        }
+
+        .powerleveling {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="dark">
+    <header class="secondary-container">
+        <nav>
+            <button class="circle transparent">
+                <i>menu</i>
+            </button>
+            <h5 class="max center-align">Diablo Powerleveling</h5>
+            <button class="circle transparent">
+                <img class="responsive" src="icon.png">
+            </button>
+        </nav>
+    </header>
+
+    <main class="responsive">
+        <article class="fill">
+            <h5>
+                Nightmare Dungeon
+                <button class="extend square fill" id="copyData">
+                    <i>link</i>
+                    <span>Copy</span>
+                </button>
+            </h5>
+            <div id="userInput">
+                <div class="field label border fill small">
+                    <input id="exp" type="number" value="1000000">
+                    <label>Gained experience</label>
+                </div>
+                <div class="field label border fill small">
+                    <input id="cost" type="number" value="30">
+                    <label>Forum gold cost</label>
+                </div>
+                <div class="field label border fill small">
+                    <input id="time" type="number" value="3">
+                    <label>Clear time in minutes</label>
+                </div>
+                <div class="field label border fill small">
+                    <input id="tier" type="number" value="41">
+                    <label>Tier Level</label>
+                </div>
+            </div>
+            <table class="border center-align">
+                <thead>
+                    <tr>
+                        <th>Powerleveling</th>
+                        <th>Glyph Leveling</th>
+                        <th>Cost</th>
+                        <th>Duration</th>
+                        <th>Add/Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="field fill small">
+                                <input class="powerleveling" type="text" value="1-50">
+                            </div>
+                        </td>
+                        <td class="glyphs"></td>
+                        <td class="cost"></td>
+                        <td class="time"></td>
+                        <td>
+                            <nav class="center-align">
+                                <a class="add">
+                                    <i>add</i>
+                                </a>
+                            </nav>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </main>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.2.13/dist/cdn/beer.min.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.0.1/dist/cdn/material-dynamic-colors.min.js"></script>
+    <script>
+        const levelData = [
+            [
+                0,
+                0,
+                0
+            ],
+            [
+                1,
+                600,
+                600
+            ],
+            [
+                2,
+                1260,
+                1860
+            ],
+            [
+                3,
+                3465,
+                5325
+            ],
+            [
+                4,
+                6325,
+                11650
+            ],
+            [
+                5,
+                8580,
+                20230
+            ],
+            [
+                6,
+                12000,
+                32230
+            ],
+            [
+                7,
+                14820,
+                47050
+            ],
+            [
+                8,
+                19305,
+                66355
+            ],
+            [
+                9,
+                22750,
+                89105
+            ],
+            [
+                10,
+                26390,
+                115495
+            ],
+            [
+                11,
+                29250,
+                144745
+            ],
+            [
+                12,
+                32240,
+                176985
+            ],
+            [
+                13,
+                35360,
+                212345
+            ],
+            [
+                14,
+                38610,
+                250955
+            ],
+            [
+                15,
+                41990,
+                292945
+            ],
+            [
+                16,
+                45500,
+                338445
+            ],
+            [
+                17,
+                49140,
+                387585
+            ],
+            [
+                18,
+                52910,
+                440495
+            ],
+            [
+                19,
+                56810,
+                497305
+            ],
+            [
+                20,
+                60840,
+                558145
+            ],
+            [
+                21,
+                65000,
+                623145
+            ],
+            [
+                22,
+                69290,
+                692435
+            ],
+            [
+                23,
+                73710,
+                766145
+            ],
+            [
+                24,
+                78260,
+                844405
+            ],
+            [
+                25,
+                82940,
+                927345
+            ],
+            [
+                26,
+                94500,
+                1021845
+            ],
+            [
+                27,
+                99820,
+                1121665
+            ],
+            [
+                28,
+                105280,
+                1226945
+            ],
+            [
+                29,
+                110880,
+                1337825
+            ],
+            [
+                30,
+                124950,
+                1462775
+            ],
+            [
+                31,
+                131250,
+                1594025
+            ],
+            [
+                32,
+                137700,
+                1731725
+            ],
+            [
+                33,
+                144300,
+                1876025
+            ],
+            [
+                34,
+                151050,
+                2027075
+            ],
+            [
+                35,
+                157950,
+                2185025
+            ],
+            [
+                36,
+                165000,
+                2350025
+            ],
+            [
+                37,
+                172200,
+                2522225
+            ],
+            [
+                38,
+                179550,
+                2701775
+            ],
+            [
+                39,
+                187050,
+                2888825
+            ],
+            [
+                40,
+                199125,
+                3087950
+            ],
+            [
+                41,
+                225600,
+                3313550
+            ],
+            [
+                42,
+                254065,
+                3567615
+            ],
+            [
+                43,
+                284580,
+                3852195
+            ],
+            [
+                44,
+                317205,
+                4169400
+            ],
+            [
+                45,
+                404800,
+                4574200
+            ],
+            [
+                46,
+                447379,
+                5021579
+            ],
+            [
+                47,
+                492591,
+                5514170
+            ],
+            [
+                48,
+                587506,
+                6101676
+            ],
+            [
+                49,
+                689724,
+                6791400
+            ],
+            [
+                50,
+                1571130,
+                8362530
+            ],
+            [
+                51,
+                1666350,
+                10028880
+            ],
+            [
+                52,
+                1763640,
+                11792520
+            ],
+            [
+                53,
+                1863000,
+                13655520
+            ],
+            [
+                54,
+                1964430,
+                15619950
+            ],
+            [
+                55,
+                2067930,
+                17687880
+            ],
+            [
+                56,
+                2173500,
+                19861380
+            ],
+            [
+                57,
+                2281140,
+                22142520
+            ],
+            [
+                58,
+                2390850,
+                24533370
+            ],
+            [
+                59,
+                2502630,
+                27036000
+            ],
+            [
+                60,
+                3052560,
+                30088560
+            ],
+            [
+                61,
+                3187800,
+                33276360
+            ],
+            [
+                62,
+                3325456,
+                36601816
+            ],
+            [
+                63,
+                3465526,
+                40067342
+            ],
+            [
+                64,
+                3608010,
+                43675352
+            ],
+            [
+                65,
+                3752910,
+                47428262
+            ],
+            [
+                66,
+                3900226,
+                51328488
+            ],
+            [
+                67,
+                4049956,
+                55378444
+            ],
+            [
+                68,
+                4202100,
+                59580544
+            ],
+            [
+                69,
+                4356660,
+                63937204
+            ],
+            [
+                70,
+                7799070,
+                71736274
+            ],
+            [
+                71,
+                8135100,
+                79871374
+            ],
+            [
+                72,
+                8476650,
+                88348024
+            ],
+            [
+                73,
+                8823720,
+                97171744
+            ],
+            [
+                74,
+                9176310,
+                106348054
+            ],
+            [
+                75,
+                9534420,
+                115882474
+            ],
+            [
+                76,
+                9898050,
+                125780524
+            ],
+            [
+                77,
+                10267200,
+                136047724
+            ],
+            [
+                78,
+                10641870,
+                146689594
+            ],
+            [
+                79,
+                11022060,
+                157711654
+            ],
+            [
+                80,
+                11476080,
+                169187734
+            ],
+            [
+                81,
+                11937000,
+                181124734
+            ],
+            [
+                82,
+                12404820,
+                193529554
+            ],
+            [
+                83,
+                12879540,
+                206409094
+            ],
+            [
+                84,
+                13361160,
+                219770254
+            ],
+            [
+                85,
+                13849680,
+                233619934
+            ],
+            [
+                86,
+                14345100,
+                247965034
+            ],
+            [
+                87,
+                14847420,
+                262812454
+            ],
+            [
+                88,
+                15356640,
+                278169094
+            ],
+            [
+                89,
+                15872760,
+                294041854
+            ],
+            [
+                90,
+                16470990,
+                310512844
+            ],
+            [
+                91,
+                17077500,
+                327590344
+            ],
+            [
+                92,
+                17692290,
+                345282634
+            ],
+            [
+                93,
+                18315360,
+                363597994
+            ],
+            [
+                94,
+                18946710,
+                382544704
+            ],
+            [
+                95,
+                19586340,
+                402131044
+            ],
+            [
+                96,
+                20234250,
+                422365294
+            ],
+            [
+                97,
+                20890440,
+                443255734
+            ],
+            [
+                98,
+                21554910,
+                464810644
+            ],
+            [
+                99,
+                22227660,
+                487038304
+            ]
+        ]
+
+        function calculate() {
+            const expPerDungeon = document.getElementById('exp').value
+            const costPerDungeon = document.getElementById('cost').value
+            const timePerDungeon = document.getElementById('time').value
+            const glyphPerDungeon = document.getElementById('tier').value * 2
+
+            const rows = document.querySelectorAll('tbody tr')
+            for (const row of rows) {
+
+                const levelRange = row.querySelector('.powerleveling').value
+                const [lvlFromString,lvlToString] = levelRange.split('-')
+                const lvlFrom = parseInt(lvlFromString)
+                const lvlTo = parseInt(lvlToString)
+
+                // validate input lvl from < lvl to
+                // Check if numbers and in data
+                if (isNaN(lvlFrom) || isNaN(lvlTo) || !levelData[lvlFrom - 1] || !levelData[lvlTo - 1] || lvlFrom > lvlTo) {
+                    console.log('invalid')
+                    // invalid class to input
+                    row.querySelector('.powerleveling').classList.add('invalid')
+                    // Add span with error message if not already there
+                    if (!row.querySelector('.error')) {
+                        const span = document.createElement('span')
+                        span.classList.add('error')
+                        // Error message depending on case
+                        row.querySelector('.powerleveling').after(span)
+                    }
+                    const span = row.querySelector('.error')
+                    if (isNaN(lvlFrom) || isNaN(lvlTo)) {
+                        span.innerText = "Only numbers seperated by - allowed e.g. 1-100"
+                    } else if (!levelData[lvlFrom - 1] || !levelData[lvlTo - 1]) {
+                        span.innerText = "MinLvl: 1 and MaxLvl: 100"
+                    } else if (lvlFrom > lvlTo) {
+                        span.innerText = "MinLvl is greater than MaxLvl"
+                    }
+                    continue
+                } else {
+                    row.querySelector('.powerleveling').classList.remove('invalid')
+                    if (row.querySelector('.error')) {
+                        row.querySelector('.error').remove()
+                    }
+                }
+                const lvlDataFrom = levelData[lvlFrom - 1]
+                const lvlDataTo = levelData[lvlTo - 1]
+                const expNeeded = lvlDataTo[2] - lvlDataFrom[2]
+                const totalRuns = Math.ceil(expNeeded / expPerDungeon)
+
+                row.querySelector('.cost').innerText = totalRuns * costPerDungeon + " fg"
+                row.querySelector('.glyphs').innerText = totalRuns * glyphPerDungeon + " exp"
+
+                totalTime = totalRuns * timePerDungeon
+                hours = Math.floor(totalTime / 60)
+                minutes = totalTime % 60
+                row.querySelector('.time').innerText = (hours > 0 ? hours + " h " : "") + minutes + " m"
+            }
+        }
+
+        function addRow() {
+            const deleteContainer = document.querySelector('tr:last-child nav.center-align')
+            deleteContainer.innerHTML = `
+                <a class="delete">
+                    <i>delete</i>
+                </a>
+            `
+            deleteContainer.querySelector('.delete').addEventListener('click',function () {
+                this.parentNode.parentNode.parentNode.remove()
+            })
+            const row = document.createElement('tr')
+            row.innerHTML = `
+                <td>
+                    <div class="field fill small">
+                        <input class="powerleveling" type="text">
+                    </div>
+                </td>
+                <td class="glyphs"></td>
+                <td class="cost"></td>
+                <td class="time"></td>
+                <td>
+                    <nav class="center-align">
+                        <a class="add">
+                            <i>add</i>
+                        </a>
+                    </nav>
+                </td>
+            `
+            document.querySelector('tbody').appendChild(row)
+            row.querySelector('.powerleveling').addEventListener('keyup',calculate)
+            row.querySelector('.add').addEventListener('click',addRow)
+
+        }
+
+        const addRowButton = document.querySelector('.add')
+        addRowButton.addEventListener('click',addRow)
+        document.querySelectorAll('#userInput input').forEach(input => input.addEventListener('keyup',calculate))
+        document.querySelector('#tier').addEventListener('keyup',() => {
+            const tier = document.querySelector('#tier').value
+            if (tier < 1 || tier > 100) {
+                document.querySelector('#tier').classList.add('invalid')
+                // Add span with error message if not already there
+                if (!document.querySelector('.error')) {
+                    const span = document.createElement('span')
+                    span.classList.add('error')
+                    span.innerText = "Tier Level is between 1 and 100"
+                    // Error message depending on case
+                    document.querySelector('#tier').after(span)
+                }
+            } else {
+                document.querySelector('#tier').classList.remove('invalid')
+                if (document.querySelector('.error')) {
+                    document.querySelector('.error').remove()
+                }
+            }
+        })
+        document.querySelector('.powerleveling').addEventListener('keyup',calculate)
+        document.getElementById('copyData').addEventListener('click',function () {
+            const copyText = document.querySelectorAll('input');
+            let text = ""
+            for (const input of copyText) {
+                text += input.value + ";"
+            }
+            base64 = btoa(text)
+            // Set as hash
+            window.location.hash = base64
+
+            // Copy to clipboard
+            const el = document.createElement('textarea');
+            el.value = window.location.href;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            // Remove hash
+            window.location.hash = ""
+        })
+        // if hash is set
+        if (window.location.hash) {
+            const hash = window.location.hash.substr(1)
+            const decoded = atob(hash)
+            let values = decoded.split(';')
+            // Remove last value if empty
+            if (values[values.length - 1] === "") {
+                values.pop()
+            }
+            let inputs = document.querySelectorAll('input')
+            // Check if more rows needed
+            if (values.length > inputs.length) {
+                for (let i = 0; i < values.length - inputs.length; i++) {
+                    addRow()
+                }
+            }
+            inputs = document.querySelectorAll('input')
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = values[i]
+            }
+        }
+
+        calculate()
+    </script>
+</body>
+
+</html>
