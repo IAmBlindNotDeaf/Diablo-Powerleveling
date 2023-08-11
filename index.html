@@ -102,7 +102,6 @@
                   type="radio"
                   name="gold-type"
                   value="diablo4"
-                  checked
                 />
                 <span>Diablo 4 Gold</span>
               </label>
@@ -265,6 +264,77 @@
         [99, 22227660, 487038304],
       ];
 
+      function addRow() {
+        const deleteContainer = document.querySelector(
+          "tr:last-child nav.center-align"
+        );
+        deleteContainer.innerHTML = `
+                      <a class="delete">
+                          <i>delete</i>
+                      </a>
+                  `;
+        deleteContainer
+          .querySelector(".delete")
+          .addEventListener("click", function () {
+            this.parentNode.parentNode.parentNode.remove();
+          });
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                      <td>
+                          <div class="field fill small">
+                              <input class="powerleveling" type="text">
+                          </div>
+                      </td>
+                      <td class="glyphs"></td>
+                      <td class="cost"></td>
+                      <td class="runs"></td>
+                      <td class="time"></td>
+                      <td>
+                          <nav class="center-align">
+                              <a class="add">
+                                  <i>add</i>
+                              </a>
+                          </nav>
+                      </td>
+                  `;
+        document.querySelector("tbody").appendChild(row);
+        row
+          .querySelector(".powerleveling")
+          .addEventListener("keyup", calculate);
+        row.querySelector(".add").addEventListener("click", addRow);
+      }
+
+      function setupListeners() {
+        document.querySelectorAll("#userInput input").forEach((input) => {
+          input.addEventListener("keyup", calculate);
+        });
+        document.querySelector("#tier").addEventListener("keyup", () => {
+          if (tier < 1 || tier > 100) {
+            document.querySelector("#tier").classList.add("invalid");
+            if (!document.querySelector(".error")) {
+              const span = document.createElement("span");
+              span.classList.add("error");
+              span.innerText = "Tier Level is between 1 and 100";
+              document.querySelector("#tier").after(span);
+            }
+          } else {
+            document.querySelector("#tier").classList.remove("invalid");
+            if (document.querySelector(".error")) {
+              document.querySelector(".error").remove();
+            }
+          }
+        });
+        document
+          .querySelector(".powerleveling")
+          .addEventListener("keyup", calculate);
+        document
+          .getElementById("diablo4Radio")
+          .addEventListener("change", calculate);
+        document
+          .getElementById("d2jspRadio")
+          .addEventListener("change", calculate);
+      }
+
       function calculate() {
         const expPerDungeon =
           parseFloat(document.getElementById("exp").value) || 0;
@@ -274,12 +344,11 @@
           parseFloat(document.getElementById("tier").value) * 2 || 0;
 
         const rows = document.querySelectorAll("tbody tr");
-
         for (const row of rows) {
           const levelRange = row.querySelector(".powerleveling").value;
           const [lvlFromString, lvlToString] = levelRange.split("-");
-          const lvlFrom = parseInt(lvlFromString);
-          const lvlTo = parseInt(lvlToString);
+          const lvlFrom = Number(lvlFromString);
+          const lvlTo = Number(lvlToString);
 
           // validate input lvl from < lvl to
           // Check if numbers and in data
@@ -290,7 +359,6 @@
             !levelData[lvlTo - 1] ||
             lvlFrom > lvlTo
           ) {
-            console.log("invalid");
             // invalid class to input
             row.querySelector(".powerleveling").classList.add("invalid");
             // Add span with error message if not already there
@@ -347,84 +415,31 @@
         }
       }
 
-      function addRow() {
-        const deleteContainer = document.querySelector(
-          "tr:last-child nav.center-align"
-        );
-        deleteContainer.innerHTML = `
-                <a class="delete">
-                    <i>delete</i>
-                </a>
-            `;
-        deleteContainer
-          .querySelector(".delete")
-          .addEventListener("click", function () {
-            this.parentNode.parentNode.parentNode.remove();
-          });
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                <td>
-                    <div class="field fill small">
-                        <input class="powerleveling" type="text">
-                    </div>
-                </td>
-                <td class="glyphs"></td>
-                <td class="cost"></td>
-                <td class="runs"></td>
-                <td class="time"></td>
-                <td>
-                    <nav class="center-align">
-                        <a class="add">
-                            <i>add</i>
-                        </a>
-                    </nav>
-                </td>
-            `;
-        document.querySelector("tbody").appendChild(row);
-        row
-          .querySelector(".powerleveling")
-          .addEventListener("keyup", calculate);
-        row.querySelector(".add").addEventListener("click", addRow);
+      function initialize() {
+        // Calculate and set up listeners when the DOM is ready
+        document.addEventListener("DOMContentLoaded", () => {
+          setupListeners(); // Set up event listeners
+          calculate(); // Calculate the initial values
+          // Add event listener for adding rows
+          const addRowButton = document.querySelector(".add");
+          addRowButton.addEventListener("click", addRow);
+        });
       }
 
-      const addRowButton = document.querySelector(".add");
-      addRowButton.addEventListener("click", addRow);
-      document
-        .querySelectorAll("#userInput input")
-        .forEach((input) => input.addEventListener("keyup", calculate));
-      document.querySelector("#tier").addEventListener("keyup", () => {
-        const tier = document.querySelector("#tier").value;
-        if (tier < 1 || tier > 100) {
-          document.querySelector("#tier").classList.add("invalid");
-          // Add span with error message if not already there
-          if (!document.querySelector(".error")) {
-            const span = document.createElement("span");
-            span.classList.add("error");
-            span.innerText = "Tier Level is between 1 and 100";
-            // Error message depending on case
-            document.querySelector("#tier").after(span);
-          }
-        } else {
-          document.querySelector("#tier").classList.remove("invalid");
-          if (document.querySelector(".error")) {
-            document.querySelector(".error").remove();
-          }
-        }
-      });
-      document
-        .querySelector(".powerleveling")
-        .addEventListener("keyup", calculate);
       document
         .getElementById("copyData")
         .addEventListener("click", function () {
-          const copyText = document.querySelectorAll("input");
-          let text = "";
-          for (const input of copyText) {
-            text += input.value + ";";
+          const copyText = [];
+
+          // Get the raw input values
+          const inputValues = document.querySelectorAll("input");
+          for (const input of inputValues) {
+            copyText.push(input.value);
           }
-          base64 = btoa(text);
+
+          const encodedText = btoa(copyText.join(";"));
           // Set as hash
-          window.location.hash = base64;
+          window.location.hash = encodedText;
 
           // Copy to clipboard
           const el = document.createElement("textarea");
@@ -437,41 +452,32 @@
           // Remove hash
           window.location.hash = "";
         });
-      // if hash is set
       if (window.location.hash) {
         const hash = window.location.hash.substr(1);
         const decoded = atob(hash);
         let values = decoded.split(";");
+
         // Remove last value if empty
         if (values[values.length - 1] === "") {
           values.pop();
         }
-        let inputs = document.querySelectorAll("input");
+
+        let inputs = document.querySelectorAll("#userInput input");
+
         // Check if more rows needed
         if (values.length > inputs.length) {
           for (let i = 0; i < values.length - inputs.length; i++) {
             addRow();
           }
         }
-        inputs = document.querySelectorAll("input");
+
+        inputs = document.querySelectorAll("#userInput input");
         for (let i = 0; i < inputs.length; i++) {
           inputs[i].value = values[i];
         }
       }
-      document
-        .querySelectorAll("#userInput input")
-        .forEach((input) => input.addEventListener("keyup", calculate));
-      document.querySelector("#tier").addEventListener("keyup", calculate);
-      document
-        .querySelector(".powerleveling")
-        .addEventListener("keyup", calculate);
-      document
-        .getElementById("diablo4Radio")
-        .addEventListener("change", calculate);
-      document
-        .getElementById("d2jspRadio")
-        .addEventListener("change", calculate);
-      calculate();
+
+      initialize();
     </script>
   </body>
 </html>
