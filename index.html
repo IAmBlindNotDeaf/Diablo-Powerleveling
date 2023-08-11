@@ -427,19 +427,19 @@
       }
 
       document
+        .querySelector(".powerleveling")
+        .addEventListener("keyup", calculate);
+      document
         .getElementById("copyData")
         .addEventListener("click", function () {
-          const copyText = [];
-
-          // Get the raw input values
-          const inputValues = document.querySelectorAll("input");
-          for (const input of inputValues) {
-            copyText.push(input.value);
+          const copyText = document.querySelectorAll("input");
+          let text = "";
+          for (const input of copyText) {
+            text += input.value + ";";
           }
-
-          const encodedText = btoa(copyText.join(";"));
+          base64 = btoa(text);
           // Set as hash
-          window.location.hash = encodedText;
+          window.location.hash = base64;
 
           // Copy to clipboard
           const el = document.createElement("textarea");
@@ -452,26 +452,23 @@
           // Remove hash
           window.location.hash = "";
         });
+      // if hash is set
       if (window.location.hash) {
         const hash = window.location.hash.substr(1);
         const decoded = atob(hash);
         let values = decoded.split(";");
-
         // Remove last value if empty
         if (values[values.length - 1] === "") {
           values.pop();
         }
-
-        let inputs = document.querySelectorAll("#userInput input");
-
+        let inputs = document.querySelectorAll("input");
         // Check if more rows needed
         if (values.length > inputs.length) {
           for (let i = 0; i < values.length - inputs.length; i++) {
             addRow();
           }
         }
-
-        inputs = document.querySelectorAll("#userInput input");
+        inputs = document.querySelectorAll("input");
         for (let i = 0; i < inputs.length; i++) {
           inputs[i].value = values[i];
         }
