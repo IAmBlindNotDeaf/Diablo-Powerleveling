@@ -59,11 +59,11 @@
     <header class="secondary-container">
       <nav>
         <button class="circle transparent">
-          <i>menu</i>
+          <img class="responsive" src="icon.ico" />
         </button>
         <h5 class="max center-align">Diablo Powerleveling</h5>
         <button class="circle transparent">
-          <img class="responsive" src="icon.png" />
+          <img class="responsive" src="icon.ico" />
         </button>
       </nav>
     </header>
@@ -426,20 +426,69 @@
         });
       }
 
-      document
-        .querySelector(".powerleveling")
-        .addEventListener("keyup", calculate);
+      // Save state to URL hash
+      function saveStateToHash() {
+        const copyText = document.querySelectorAll("input");
+        let text = "";
+        for (const input of copyText) {
+          text += input.value + ";";
+        }
+
+        const radioDiablo4 = document.getElementById("diablo4Radio");
+        const radioD2JSP = document.getElementById("d2jspRadio");
+        if (radioDiablo4.checked) {
+          text += "radio=diablo4;";
+        } else if (radioD2JSP.checked) {
+          text += "radio=d2jsp;";
+        }
+
+        base64 = btoa(text);
+        // Set as hash
+        window.location.hash = base64;
+      }
+
+      // Restore state from URL hash
+      function restoreStateFromHash() {
+        if (window.location.hash) {
+          const hash = window.location.hash.substr(1);
+          const decoded = atob(hash);
+          let values = decoded.split(";");
+          if (values[values.length - 1] === "") {
+            values.pop();
+          }
+
+          let inputs = document.querySelectorAll("input");
+          if (values.length > inputs.length) {
+            for (let i = 0; i < values.length - inputs.length - 1; i++) {
+              addRow();
+            }
+          }
+
+          inputs = document.querySelectorAll("input");
+          for (let i = 0; i < inputs.length; i++) {
+            inputs[i].value = values[i];
+          }
+
+          const radioDiablo4 = document.getElementById("diablo4Radio");
+          const radioD2JSP = document.getElementById("d2jspRadio");
+          for (const value of values) {
+            if (value.startsWith("radio=")) {
+              const radioValue = value.substring(6);
+              if (radioValue === "diablo4") {
+                radioDiablo4.checked = true;
+              } else if (radioValue === "d2jsp") {
+                radioD2JSP.checked = true;
+              }
+            }
+          }
+        }
+      }
+
+      // Add event listener to the Copy Data button
       document
         .getElementById("copyData")
         .addEventListener("click", function () {
-          const copyText = document.querySelectorAll("input");
-          let text = "";
-          for (const input of copyText) {
-            text += input.value + ";";
-          }
-          base64 = btoa(text);
-          // Set as hash
-          window.location.hash = base64;
+          saveStateToHash();
 
           // Copy to clipboard
           const el = document.createElement("textarea");
@@ -449,30 +498,29 @@
           document.execCommand("copy");
           document.body.removeChild(el);
 
-          // Remove hash
+          // Clear hash
           window.location.hash = "";
         });
-      // if hash is set
-      if (window.location.hash) {
-        const hash = window.location.hash.substr(1);
-        const decoded = atob(hash);
-        let values = decoded.split(";");
-        // Remove last value if empty
-        if (values[values.length - 1] === "") {
-          values.pop();
-        }
-        let inputs = document.querySelectorAll("input");
-        // Check if more rows needed
-        if (values.length > inputs.length) {
-          for (let i = 0; i < values.length - inputs.length; i++) {
-            addRow();
-          }
-        }
-        inputs = document.querySelectorAll("input");
-        for (let i = 0; i < inputs.length; i++) {
-          inputs[i].value = values[i];
-        }
-      }
+
+      // Restore state when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        restoreStateFromHash();
+        // Set up event listeners for input changes
+        document.querySelectorAll("#userInput input").forEach((input) => {
+          input.addEventListener("keyup", saveStateToHash);
+        });
+        // Set up event listeners for radio button changes
+        document
+          .getElementById("diablo4Radio")
+          .addEventListener("change", saveStateToHash);
+        document
+          .getElementById("d2jspRadio")
+          .addEventListener("change", saveStateToHash);
+        // Set up event listeners for powerleveling input changes
+        document.querySelectorAll(".powerleveling").forEach((input) => {
+          input.addEventListener("keyup", saveStateToHash);
+        });
+      });
 
       initialize();
     </script>
