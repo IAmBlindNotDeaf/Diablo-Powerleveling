@@ -182,12 +182,6 @@
       src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.0.1/dist/cdn/material-dynamic-colors.min.js"
     ></script>
     <script>
-      const ALLOWED_DOMAINS = [
-        "localhost",
-        "127.0.0.1",
-        "iamblindnotdeaf.github.io", // Your GitHub Pages domain
-      ];
-
       const D4levelData = [
         [0, 0, 0],
         [1, 600000, 600000],
@@ -1108,61 +1102,28 @@
           }
         });
 
-      // Modify the DOMContentLoaded event listener
-      document.addEventListener("DOMContentLoaded", () => {
-        // Check if this is a share link
+      // Add a hash change listener to update the view when the URL changes
+      window.addEventListener("hashchange", function () {
         if (window.location.hash.includes("#share=")) {
           const hashParts = window.location.hash.split("&");
           const hash = hashParts[0].substring(7); // Remove '#share=' prefix
           document.body.innerHTML = createShareableView(hash);
-          return;
+        } else {
+          restoreStateFromHash();
+          setupListeners();
         }
-
-        // Check if access is allowed
-        const isAllowedDomain = ALLOWED_DOMAINS.some(
-          (domain) =>
-            window.location.hostname === domain ||
-            window.location.hostname.endsWith("." + domain)
-        );
-
-        if (!isAllowedDomain) {
-          // Redirect to share view with empty data
-          const emptyShareHash = btoa("game=d2r;");
-          window.location.hash = `share=${emptyShareHash}&t=${Date.now()}`;
-          return;
-        }
-
-        // Normal initialization for allowed domains
-        restoreStateFromHash();
-        setupListeners();
       });
 
-      // Also modify the hashchange listener
-      window.addEventListener("hashchange", function () {
+      // Update the DOMContentLoaded event listener (keep existing one)
+      document.addEventListener("DOMContentLoaded", () => {
         if (window.location.hash.includes("#share=")) {
           const hashParts = window.location.hash.split("&");
-          const hash = hashParts[0].substring(7);
+          const hash = hashParts[0].substring(7); // Remove '#share=' prefix
           document.body.innerHTML = createShareableView(hash);
-          return;
+        } else {
+          restoreStateFromHash();
+          setupListeners();
         }
-
-        // Check if access is allowed
-        const isAllowedDomain = ALLOWED_DOMAINS.some(
-          (domain) =>
-            window.location.hostname === domain ||
-            window.location.hostname.endsWith("." + domain)
-        );
-
-        if (!isAllowedDomain) {
-          // Redirect to share view with empty data
-          const emptyShareHash = btoa("game=d2r;");
-          window.location.hash = `share=${emptyShareHash}&t=${Date.now()}`;
-          return;
-        }
-
-        // Normal initialization for allowed domains
-        restoreStateFromHash();
-        setupListeners();
       });
     </script>
   </body>
