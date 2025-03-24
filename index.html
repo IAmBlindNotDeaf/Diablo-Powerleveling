@@ -58,12 +58,12 @@
   <body class="dark">
     <header class="secondary-container">
       <nav>
-        <button class="circle transparent">
-          <img class="responsive" src="icon.ico" />
+        <button class="circle transparent" aria-label="Diablo icon">
+          <img class="responsive" src="icon.ico" alt="Diablo game icon" />
         </button>
-        <h5 class="max center-align">Diablo Powerleveling</h5>
-        <button class="circle transparent">
-          <img class="responsive" src="icon.ico" />
+        <h5 class="max center-align">Diablo Powerleveling Calculator</h5>
+        <button class="circle transparent" aria-label="Diablo icon">
+          <img class="responsive" src="icon.ico" alt="Diablo game icon" />
         </button>
       </nav>
     </header>
@@ -71,77 +71,98 @@
     <main class="responsive">
       <article class="fill">
         <h5>
-          Vault Nightmare Dungeon
-          <button class="extend square fill" id="copyData">
+          Experience Calculator
+          <button
+            class="extend square fill"
+            id="copyData"
+            aria-label="Copy calculator link"
+          >
             <i>link</i>
-            <span>Copy</span>
+            <span>Share Link</span>
           </button>
         </h5>
         <div id="userInput">
-          <div class="field label border fill small">
-            <input id="exp" type="number" value="4500000">
-            <label for="exp">Experience per dungeon</label>
-          </div>
-          <div class="field label border fill small">
-            <input id="time" type="number" value="7" />
-            <label for="time">Clear time in minutes per dungeon</label>
-          </div>
-          <div class="field label border fill small">
-            <input id="tier" type="number" value="71" />
-            <label for="tier">Tier level of dungeon</label>
-          </div>
-          <div class="field label border fill small">
-            <input id="cost" type="number" value="30" />
-            <label for="cost">Cost per dungeon</label>
-          </div>
           <div>
-            <nav>
+            <nav aria-label="Game selection">
               <label class="radio">
                 <input
-                  id="diablo4Radio"
+                  id="d4Radio"
                   type="radio"
-                  name="gold-type"
-                  value="diablo4"
+                  name="game-type"
+                  value="d4"
+                  checked
                 />
-                <span>Diablo 4 Gold</span>
+                <span>Diablo 4</span>
               </label>
               <label class="radio">
                 <input
-                  id="d2jspRadio"
+                  id="d2rRadio"
                   type="radio"
-                  name="gold-type"
-                  value="d2jsp"
+                  name="game-type"
+                  value="d2r"
                 />
-                <span>d2jsp Forum Gold</span>
+                <span>Diablo 2 Resurrected</span>
               </label>
             </nav>
+          </div>
+          <div class="field label border fill small">
+            <input
+              id="exp"
+              type="number"
+              min="0"
+              step="100000"
+              aria-describedby="expHelper"
+            />
+            <label id="expLabel" for="exp">Experience per Run</label>
+          </div>
+          <div class="field label border fill small">
+            <input id="time" type="number" />
+            <label id="timeLabel" for="time">Duration per Run</label>
+          </div>
+          <div class="field label border fill small">
+            <input
+              id="cost"
+              type="number"
+              min="0"
+              step="10"
+              aria-describedby="costHelper"
+            />
+            <label id="costLabel" for="cost">Cost per Run (fg)</label>
           </div>
         </div>
         <table class="border center-align">
           <thead>
             <tr>
-              <th>Powerleveling</th>
-              <th>Glyph Leveling</th>
-              <th>Total Cost</th>
-              <th>Total Runs</th>
-              <th>Duration</th>
-              <th>Add/Delete</th>
+              <th scope="col" title="Enter level range (D4: 1-300, D2R: 1-99)">
+                Level Range
+              </th>
+              <th scope="col" title="Total forum gold cost">Total Cost</th>
+              <th scope="col" title="Number of runs needed">Required Runs</th>
+              <th scope="col" title="Estimated completion time">
+                Time to Complete
+              </th>
+              <th scope="col">Add / Delete</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <div class="field fill small">
-                  <input class="powerleveling" type="text" value="1-50" />
+                  <input
+                    class="powerleveling"
+                    type="text"
+                    value="1-60"
+                    placeholder="e.g., 1-60"
+                    aria-label="Enter level range (D4: 1-300, D2R: 1-99)"
+                  />
                 </div>
               </td>
-              <td class="glyphs"></td>
-              <td class="cost"></td>
-              <td class="runs"></td>
-              <td class="time"></td>
+              <td class="cost" aria-label="Total cost in forum gold"></td>
+              <td class="runs" aria-label="Total number of runs required"></td>
+              <td class="time" aria-label="Total time to complete"></td>
               <td>
                 <nav class="center-align">
-                  <a class="add">
+                  <a class="add" aria-label="Add new level range">
                     <i>add</i>
                   </a>
                 </nav>
@@ -161,178 +182,569 @@
       src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.0.1/dist/cdn/material-dynamic-colors.min.js"
     ></script>
     <script>
-      const levelData = [
+      const D4levelData = [
         [0, 0, 0],
-        [1, 600, 600],
-        [2, 1260, 1860],
-        [3, 3465, 5325],
-        [4, 6325, 11650],
-        [5, 8580, 20230],
-        [6, 12000, 32230],
-        [7, 14820, 47050],
-        [8, 19305, 66355],
-        [9, 22750, 89105],
-        [10, 26390, 115495],
-        [11, 29250, 144745],
-        [12, 32240, 176985],
-        [13, 35360, 212345],
-        [14, 38610, 250955],
-        [15, 41990, 292945],
-        [16, 45500, 338445],
-        [17, 49140, 387585],
-        [18, 52910, 440495],
-        [19, 56810, 497305],
-        [20, 60840, 558145],
-        [21, 65000, 623145],
-        [22, 69290, 692435],
-        [23, 73710, 766145],
-        [24, 78260, 844405],
-        [25, 82940, 927345],
-        [26, 94500, 1021845],
-        [27, 99820, 1121665],
-        [28, 105280, 1226945],
-        [29, 110880, 1337825],
-        [30, 124950, 1462775],
-        [31, 131250, 1594025],
-        [32, 137700, 1731725],
-        [33, 144300, 1876025],
-        [34, 151050, 2027075],
-        [35, 157950, 2185025],
-        [36, 165000, 2350025],
-        [37, 172200, 2522225],
-        [38, 179550, 2701775],
-        [39, 187050, 2888825],
-        [40, 199125, 3087950],
-        [41, 225600, 3313550],
-        [42, 254065, 3567615],
-        [43, 284580, 3852195],
-        [44, 317205, 4169400],
-        [45, 404800, 4574200],
-        [46, 447379, 5021579],
-        [47, 492591, 5514170],
-        [48, 587506, 6101676],
-        [49, 689724, 6791400],
-        [50, 1571130, 8362530],
-        [51, 1666350, 10028880],
-        [52, 1763640, 11792520],
-        [53, 1863000, 13655520],
-        [54, 1964430, 15619950],
-        [55, 2067930, 17687880],
-        [56, 2173500, 19861380],
-        [57, 2281140, 22142520],
-        [58, 2390850, 24533370],
-        [59, 2502630, 27036000],
-        [60, 3052560, 30088560],
-        [61, 3187800, 33276360],
-        [62, 3325456, 36601816],
-        [63, 3465526, 40067342],
-        [64, 3608010, 43675352],
-        [65, 3752910, 47428262],
-        [66, 3900226, 51328488],
-        [67, 4049956, 55378444],
-        [68, 4202100, 59580544],
-        [69, 4356660, 63937204],
-        [70, 7799070, 71736274],
-        [71, 8135100, 79871374],
-        [72, 8476650, 88348024],
-        [73, 8823720, 97171744],
-        [74, 9176310, 106348054],
-        [75, 9534420, 115882474],
-        [76, 9898050, 125780524],
-        [77, 10267200, 136047724],
-        [78, 10641870, 146689594],
-        [79, 11022060, 157711654],
-        [80, 11476080, 169187734],
-        [81, 11937000, 181124734],
-        [82, 12404820, 193529554],
-        [83, 12879540, 206409094],
-        [84, 13361160, 219770254],
-        [85, 13849680, 233619934],
-        [86, 14345100, 247965034],
-        [87, 14847420, 262812454],
-        [88, 15356640, 278169094],
-        [89, 15872760, 294041854],
-        [90, 16470990, 310512844],
-        [91, 17077500, 327590344],
-        [92, 17692290, 345282634],
-        [93, 18315360, 363597994],
-        [94, 18946710, 382544704],
-        [95, 19586340, 402131044],
-        [96, 20234250, 422365294],
-        [97, 20890440, 443255734],
-        [98, 21554910, 464810644],
-        [99, 22227660, 487038304],
+        [1, 600000, 600000],
+        [2, 600000, 1200000],
+        [3, 610000, 1810000],
+        [4, 620000, 2430000],
+        [5, 630000, 3060000],
+        [6, 640000, 3700000],
+        [7, 650000, 4350000],
+        [8, 660000, 5010000],
+        [9, 670000, 5680000],
+        [10, 680000, 6360000],
+        [11, 690000, 7050000],
+        [12, 700000, 7750000],
+        [13, 710000, 8460000],
+        [14, 720000, 9180000],
+        [15, 730000, 9910000],
+        [16, 740000, 10650000],
+        [17, 750000, 11400000],
+        [18, 760000, 12160000],
+        [19, 770000, 12930000],
+        [20, 780000, 13710000],
+        [21, 790000, 14500000],
+        [22, 800000, 15300000],
+        [23, 810000, 16110000],
+        [24, 820000, 16930000],
+        [25, 830000, 17760000],
+        [26, 840000, 18600000],
+        [27, 850000, 19450000],
+        [28, 860000, 20310000],
+        [29, 870000, 21180000],
+        [30, 880000, 22060000],
+        [31, 890000, 22950000],
+        [32, 900000, 23850000],
+        [33, 910000, 24760000],
+        [34, 920000, 25680000],
+        [35, 930000, 26610000],
+        [36, 940000, 27550000],
+        [37, 950000, 28500000],
+        [38, 960000, 29460000],
+        [39, 970000, 30430000],
+        [40, 980000, 31410000],
+        [41, 990000, 32400000],
+        [42, 1000000, 33400000],
+        [43, 1010000, 34410000],
+        [44, 1020000, 35430000],
+        [45, 1030000, 36460000],
+        [46, 1040000, 37500000],
+        [47, 1050000, 38550000],
+        [48, 1060000, 39610000],
+        [49, 1070000, 40680000],
+        [50, 1080000, 41760000],
+        [51, 1090000, 42850000],
+        [52, 1100000, 43950000],
+        [53, 1110000, 45060000],
+        [54, 1120000, 46180000],
+        [55, 1130000, 47310000],
+        [56, 1140000, 48450000],
+        [57, 1150000, 49600000],
+        [58, 1160000, 50760000],
+        [59, 1170000, 51930000],
+        [60, 1180000, 53110000],
+        [61, 1190000, 54300000],
+        [62, 1200000, 55500000],
+        [63, 1210000, 56710000],
+        [64, 1220000, 57930000],
+        [65, 1230000, 59160000],
+        [66, 1240000, 60400000],
+        [67, 1250000, 61650000],
+        [68, 1260000, 62910000],
+        [69, 1270000, 64180000],
+        [70, 1280000, 65460000],
+        [71, 1290000, 66750000],
+        [72, 1300000, 68050000],
+        [73, 1310000, 69360000],
+        [74, 1320000, 70680000],
+        [75, 1330000, 72010000],
+        [76, 1340000, 73350000],
+        [77, 1353850, 74703850],
+        [78, 1395669, 76099519],
+        [79, 1438310, 77537829],
+        [80, 1481780, 79019609],
+        [81, 1526083, 80545692],
+        [82, 1571225, 82116917],
+        [83, 1617210, 83734127],
+        [84, 1664044, 85398171],
+        [85, 1711732, 87109903],
+        [86, 1760280, 88870183],
+        [87, 1809692, 90679875],
+        [88, 1859973, 92539848],
+        [89, 1911128, 94450976],
+        [90, 1963164, 96414140],
+        [91, 2016083, 98430223],
+        [92, 2069892, 100500115],
+        [93, 2124595, 102624710],
+        [94, 2180198, 104804908],
+        [95, 2236704, 107041612],
+        [96, 2294120, 109335732],
+        [97, 2352449, 111688181],
+        [98, 2411697, 114099878],
+        [99, 2471868, 116571746],
+        [100, 2532967, 119104713],
+        [101, 2595000, 121699713],
+        [102, 2657969, 124357682],
+        [103, 2721881, 127079563],
+        [104, 2786739, 129866302],
+        [105, 2852549, 132718851],
+        [106, 2919315, 135638166],
+        [107, 2987042, 138625208],
+        [108, 3055734, 141680942],
+        [109, 3125396, 144806338],
+        [110, 3196032, 148002370],
+        [111, 3267646, 151270016],
+        [112, 3340244, 154610260],
+        [113, 3413830, 158024090],
+        [114, 3488408, 161512498],
+        [115, 3563982, 165076480],
+        [116, 3640558, 168717038],
+        [117, 3718138, 172435176],
+        [118, 3796729, 176231905],
+        [119, 3876333, 180108238],
+        [120, 3956956, 184065194],
+        [121, 4038602, 188103796],
+        [122, 4121274, 192225070],
+        [123, 4204978, 196430048],
+        [124, 4289718, 200719766],
+        [125, 4375497, 205095263],
+        [126, 4462320, 209557583],
+        [127, 4550191, 214107774],
+        [128, 4639114, 218746888],
+        [129, 4729095, 223475983],
+        [130, 4820135, 228296118],
+        [131, 4912241, 233208359],
+        [132, 5005415, 238213774],
+        [133, 5099662, 243313436],
+        [134, 5194987, 248508423],
+        [135, 5291393, 253799816],
+        [136, 5388884, 259188700],
+        [137, 5487464, 264676164],
+        [138, 5587137, 270263301],
+        [139, 5687908, 275951209],
+        [140, 5789780, 281740989],
+        [141, 5892758, 287633747],
+        [142, 5996844, 293630591],
+        [143, 6102044, 299732635],
+        [144, 6208361, 305940996],
+        [145, 6315800, 312256796],
+        [146, 6424363, 318681159],
+        [147, 6534055, 325215214],
+        [148, 6644880, 331860094],
+        [149, 6756841, 338616935],
+        [150, 6869943, 345486878],
+        [151, 6984189, 352471067],
+        [152, 7099584, 359570651],
+        [153, 7216131, 366786782],
+        [154, 7333833, 374120615],
+        [155, 7452695, 381573310],
+        [156, 7572720, 389146030],
+        [157, 7693913, 396839943],
+        [158, 7816277, 404656220],
+        [159, 7939815, 412596035],
+        [160, 8064532, 420660567],
+        [161, 8190430, 428850997],
+        [162, 8317515, 437168512],
+        [163, 8445789, 445614301],
+        [164, 8575257, 454189558],
+        [165, 8705921, 462895479],
+        [166, 8837786, 471733265],
+        [167, 8970855, 480704120],
+        [168, 9105132, 489809252],
+        [169, 9240621, 499049873],
+        [170, 9377325, 508427198],
+        [171, 9515247, 517942445],
+        [172, 9654392, 527596837],
+        [173, 9794763, 537391600],
+        [174, 9936363, 547327963],
+        [175, 10079196, 557407159],
+        [176, 10223266, 567630425],
+        [177, 10368576, 577999001],
+        [178, 10515130, 588514131],
+        [179, 10662932, 599177063],
+        [180, 10811984, 609989047],
+        [181, 10962290, 620951337],
+        [182, 11113854, 632065191],
+        [183, 11266679, 643331870],
+        [184, 11420769, 654752639],
+        [185, 11576128, 666328767],
+        [186, 11732758, 678061525],
+        [187, 11890663, 689952188],
+        [188, 12049847, 702002035],
+        [189, 12210312, 714212347],
+        [190, 12372063, 726584410],
+        [191, 12535103, 739119513],
+        [192, 12699436, 751818949],
+        [193, 12865064, 764684013],
+        [194, 13031991, 777716004],
+        [195, 13200220, 790916224],
+        [196, 13369755, 804285979],
+        [197, 13540599, 817826578],
+        [198, 13712756, 831539334],
+        [199, 13886229, 845425563],
+        [200, 14061021, 859486584],
+        [201, 14237135, 873723719],
+        [202, 14493422, 888217141],
+        [203, 15014600, 903231741],
+        [204, 15564945, 918796686],
+        [205, 16145934, 934942620],
+        [206, 16759110, 951701730],
+        [207, 17406087, 969107817],
+        [208, 18088549, 987196366],
+        [209, 18808257, 1006004623],
+        [210, 19567051, 1025571674],
+        [211, 20366850, 1045938524],
+        [212, 21209659, 1067148183],
+        [213, 22097571, 1089245754],
+        [214, 23032769, 1112278523],
+        [215, 24017532, 1136296055],
+        [216, 25054236, 1161350291],
+        [217, 26145360, 1187495651],
+        [218, 27293489, 1214789140],
+        [219, 28501318, 1243290458],
+        [220, 29771654, 1273062112],
+        [221, 31107427, 1304169539],
+        [222, 32511684, 1336681223],
+        [223, 33987604, 1370668827],
+        [224, 35538497, 1406207324],
+        [225, 37167807, 1443375131],
+        [226, 38879125, 1482254256],
+        [227, 40676184, 1522930440],
+        [228, 42562873, 1565493313],
+        [229, 44543238, 1610036551],
+        [230, 46621487, 1656658038],
+        [231, 48802000, 1705460038],
+        [232, 51089331, 1756549369],
+        [233, 53488216, 1810037585],
+        [234, 56003579, 1866041164],
+        [235, 58640539, 1924681703],
+        [236, 61404416, 1986086119],
+        [237, 64300741, 2050386860],
+        [238, 67335257, 2117722117],
+        [239, 70513933, 2188236050],
+        [240, 73842969, 2262079019],
+        [241, 77328803, 2339407822],
+        [242, 80978120, 2420385942],
+        [243, 84797861, 2505183803],
+        [244, 88795231, 2593979034],
+        [245, 92977707, 2686956741],
+        [246, 97353049, 2784309790],
+        [247, 101929310, 2886239100],
+        [248, 106714842, 2992953942],
+        [249, 111718309, 3104672251],
+        [250, 116948696, 3221620947],
+        [251, 122415321, 3344036268],
+        [252, 128127845, 3472164113],
+        [253, 134096283, 3606260396],
+        [254, 140331014, 3746591410],
+        [255, 146842796, 3893434206],
+        [256, 153642776, 4047076982],
+        [257, 160742504, 4207819486],
+        [258, 168153945, 4375973431],
+        [259, 175889489, 4551862920],
+        [260, 183961971, 4735824891],
+        [261, 192384680, 4928209571],
+        [262, 201171377, 5129380948],
+        [263, 210336304, 5339717252],
+        [264, 219894206, 5559611458],
+        [265, 229860341, 5789471799],
+        [266, 240250499, 6029722298],
+        [267, 251081019, 6280803317],
+        [268, 262368802, 6543172119],
+        [269, 274131333, 6817303452],
+        [270, 286386693, 7103690145],
+        [271, 299153584, 7402843729],
+        [272, 312451343, 7715295072],
+        [273, 326299962, 8041595034],
+        [274, 340720108, 8382315142],
+        [275, 355733144, 8738048286],
+        [276, 371361149, 9109409435],
+        [277, 387626938, 9497036373],
+        [278, 404554087, 9901590460],
+        [279, 422166952, 10323757412],
+        [280, 440490693, 10764248105],
+        [281, 459551299, 11223799404],
+        [282, 479375610, 11703175014],
+        [283, 499991343, 12203166357],
+        [284, 521427119, 12724593476],
+        [285, 543712484, 13268305960],
+        [286, 566877940, 13835183900],
+        [287, 590954971, 14426138871],
+        [288, 615976073, 15042114944],
+        [289, 641974777, 15684089721],
+        [290, 668985686, 16353075407],
+        [291, 697044498, 17050119905],
+        [292, 726188043, 17776307948],
+        [293, 756454310, 18532762258],
+        [294, 787882482, 19320644740],
+        [295, 820512969, 20141157709],
+        [296, 854387440, 20995545149],
+        [297, 889548861, 21885094010],
+        [298, 926041528, 22811135538],
+        [299, 963911104, 23775046642],
+        [300, 1003204659, 24778251301],
       ];
 
+      const D2RlevelData = [
+        [0, 0, 0],
+        [1, 500, 500],
+        [2, 1000, 1500],
+        [3, 2250, 3750],
+        [4, 4125, 7875],
+        [5, 6300, 14175],
+        [6, 8505, 22680],
+        [7, 10206, 32886],
+        [8, 11510, 44396],
+        [9, 13319, 57715],
+        [10, 14429, 72144],
+        [11, 18036, 90180],
+        [12, 22545, 112725],
+        [13, 28181, 140906],
+        [14, 35226, 176132],
+        [15, 44033, 220165],
+        [16, 55042, 275207],
+        [17, 68801, 344008],
+        [18, 86002, 430010],
+        [19, 107503, 537513],
+        [20, 134378, 671891],
+        [21, 167973, 839864],
+        [22, 209966, 1049830],
+        [23, 262457, 1312287],
+        [24, 328072, 1640359],
+        [25, 410090, 2050449],
+        [26, 512612, 2563061],
+        [27, 640765, 3203826],
+        [28, 698434, 3902260],
+        [29, 761293, 4663553],
+        [30, 829810, 5493363],
+        [31, 904492, 6397855],
+        [32, 985897, 7383752],
+        [33, 1074627, 8458379],
+        [34, 1171344, 9629723],
+        [35, 1276765, 10906488],
+        [36, 1391674, 12298162],
+        [37, 1516924, 13815086],
+        [38, 1653448, 15468534],
+        [39, 1802257, 17270791],
+        [40, 1964461, 19235252],
+        [41, 2141263, 21376515],
+        [42, 2333976, 23710491],
+        [43, 2544034, 26254525],
+        [44, 2772997, 29027522],
+        [45, 3022566, 32050088],
+        [46, 3294598, 35344686],
+        [47, 3591112, 38935798],
+        [48, 3914311, 42850109],
+        [49, 4266600, 47116709],
+        [50, 4650593, 51767302],
+        [51, 5069147, 56836449],
+        [52, 5525370, 62361819],
+        [53, 6022654, 68384473],
+        [54, 6564692, 74949165],
+        [55, 7155515, 82104680],
+        [56, 7799511, 89904191],
+        [57, 8501467, 98405658],
+        [58, 9266598, 107672256],
+        [59, 10100593, 117772849],
+        [60, 11009646, 128782495],
+        [61, 12000515, 140783010],
+        [62, 13080560, 153863570],
+        [63, 14257811, 168121381],
+        [64, 15541015, 183662396],
+        [65, 16939705, 200602101],
+        [66, 18464279, 219066380],
+        [67, 20126064, 239192444],
+        [68, 21937409, 261129853],
+        [69, 23911777, 285041630],
+        [70, 26063836, 311105466],
+        [71, 28409582, 339515048],
+        [72, 30966444, 370481492],
+        [73, 33753424, 404234916],
+        [74, 36791232, 441026148],
+        [75, 40102443, 481128591],
+        [76, 43711663, 524840254],
+        [77, 47645713, 572485967],
+        [78, 51933826, 624419793],
+        [79, 56607872, 681027665],
+        [80, 61702579, 742730244],
+        [81, 67255812, 809986056],
+        [82, 73308835, 883294891],
+        [83, 79906630, 963201521],
+        [84, 87098226, 1050299747],
+        [85, 94937067, 1145236814],
+        [86, 103481403, 1248718217],
+        [87, 112794729, 1361512946],
+        [88, 122946255, 1484459201],
+        [89, 134011418, 1618470619],
+        [90, 146072446, 1764543065],
+        [91, 159218965, 1923762030],
+        [92, 173548673, 2097310703],
+        [93, 189168053, 2286478756],
+        [94, 206193177, 2492671933],
+        [95, 224750564, 2717422497],
+        [96, 244978115, 2962400612],
+        [97, 267026144, 3229426756],
+        [98, 291058498, 3520485254],
+        [99, 0, 3520485254], // Level 99 doesn't need more exp
+      ];
+
+      // Define defaults in one place instead of duplicating in updatePresetValues
+      const DEFAULT_VALUES = {
+        d4: { exp: "15000000", time: "5", cost: "200" },
+        d2r: { exp: "25000000", time: "5", cost: "100" },
+      };
+
+      // Add these variables to store game-specific values
+      let d4Values = {
+        exp: "15000000",
+        time: "5",
+        cost: "200",
+      };
+
+      let d2rValues = {
+        exp: "25000000",
+        time: "5",
+        cost: "100",
+      };
+
       function addRow() {
-        const deleteContainer = document.querySelector(
-          "tr:last-child nav.center-align"
-        );
-        deleteContainer.innerHTML = `
-                      <a class="delete">
-                          <i>delete</i>
-                      </a>
-                  `;
-        deleteContainer
-          .querySelector(".delete")
-          .addEventListener("click", function () {
-            this.parentNode.parentNode.parentNode.remove();
-          });
+        // Create new row
         const row = document.createElement("tr");
         row.innerHTML = `
                       <td>
                           <div class="field fill small">
-                              <input class="powerleveling" type="text">
+              <input class="powerleveling" type="text" placeholder="60-70" aria-label="Enter level range">
                           </div>
                       </td>
-                      <td class="glyphs"></td>
                       <td class="cost"></td>
                       <td class="runs"></td>
                       <td class="time"></td>
                       <td>
                           <nav class="center-align">
-                              <a class="add">
-                                  <i>add</i>
+              <a class="delete">
+                <i>delete</i>
                               </a>
                           </nav>
                       </td>
                   `;
+
+        // Add the new row to the table
         document.querySelector("tbody").appendChild(row);
-        row
-          .querySelector(".powerleveling")
-          .addEventListener("keyup", calculate);
-        row.querySelector(".add").addEventListener("click", addRow);
+
+        // Add event listeners to the new row
+        const newInput = row.querySelector(".powerleveling");
+        newInput.addEventListener("keyup", () => {
+          calculate();
+          saveStateToHash();
+        });
+
+        // Add delete functionality to the new row
+        const deleteButton = row.querySelector(".delete");
+        deleteButton.addEventListener("click", function () {
+          row.remove();
+          calculate();
+          saveStateToHash();
+        });
+
+        // Calculate with the new row
+        calculate();
+        saveStateToHash();
+      }
+
+      function updateLabels(isD4) {
+        const location = isD4 ? "Pit 100" : "Chaos";
+        document.getElementById(
+          "expLabel"
+        ).textContent = `Experience per ${location}`;
+        document.getElementById(
+          "timeLabel"
+        ).textContent = `Duration per ${location} (minutes)`;
+        document.getElementById(
+          "costLabel"
+        ).textContent = `Cost per ${location} (fg)`;
+      }
+
+      function updatePresetValues(isD4, useDefaults = false) {
+        const exp = document.getElementById("exp");
+        const time = document.getElementById("time");
+        const cost = document.getElementById("cost");
+
+        if (useDefaults) {
+          if (isD4) {
+            d4Values = { ...DEFAULT_VALUES.d4 };
+          } else {
+            d2rValues = { ...DEFAULT_VALUES.d2r };
+          }
+        }
+
+        // Use stored values for the selected game
+        if (isD4) {
+          exp.value = d4Values.exp;
+          time.value = d4Values.time;
+          cost.value = d4Values.cost;
+        } else {
+          exp.value = d2rValues.exp;
+          time.value = d2rValues.time;
+          cost.value = d2rValues.cost;
+        }
       }
 
       function setupListeners() {
+        // Add listeners for input fields in user input section
         document.querySelectorAll("#userInput input").forEach((input) => {
-          input.addEventListener("keyup", calculate);
-        });
-        document.querySelector("#tier").addEventListener("keyup", () => {
-          if (tier < 1 || tier > 100) {
-            document.querySelector("#tier").classList.add("invalid");
-            if (!document.querySelector(".error")) {
-              const span = document.createElement("span");
-              span.classList.add("error");
-              span.innerText = "Tier Level is between 1 and 100";
-              document.querySelector("#tier").after(span);
+          input.addEventListener("keyup", () => {
+            // Store values when they change
+            const isD4 = document.getElementById("d4Radio").checked;
+            if (isD4) {
+              d4Values.exp = document.getElementById("exp").value;
+              d4Values.time = document.getElementById("time").value;
+              d4Values.cost = document.getElementById("cost").value;
+            } else {
+              d2rValues.exp = document.getElementById("exp").value;
+              d2rValues.time = document.getElementById("time").value;
+              d2rValues.cost = document.getElementById("cost").value;
             }
-          } else {
-            document.querySelector("#tier").classList.remove("invalid");
-            if (document.querySelector(".error")) {
-              document.querySelector(".error").remove();
-            }
-          }
+            calculate();
+          });
         });
-        document
-          .querySelector(".powerleveling")
-          .addEventListener("keyup", calculate);
-        document
-          .getElementById("diablo4Radio")
-          .addEventListener("change", calculate);
-        document
-          .getElementById("d2jspRadio")
-          .addEventListener("change", calculate);
+
+        // Add listeners for radio buttons
+        const d4Radio = document.getElementById("d4Radio");
+        const d2rRadio = document.getElementById("d2rRadio");
+
+        d4Radio.addEventListener("change", () => {
+          updateLabels(true);
+          updatePresetValues(true);
+          calculate();
+          saveStateToHash();
+        });
+
+        d2rRadio.addEventListener("change", () => {
+          updateLabels(false);
+          updatePresetValues(false);
+          calculate();
+          saveStateToHash();
+        });
+
+        // Add listener for the first row's add button
+        const initialAddButton = document.querySelector(
+          "tbody tr:first-child .add"
+        );
+        if (initialAddButton) {
+          initialAddButton.addEventListener("click", addRow);
+        }
+
+        // Add listener for the first row's powerleveling input
+        const firstRowInput = document.querySelector(
+          "tbody tr:first-child .powerleveling"
+        );
+        if (firstRowInput) {
+          firstRowInput.addEventListener("keyup", () => {
+            calculate();
+            saveStateToHash();
+          });
+        }
       }
 
       function calculate() {
@@ -340,42 +752,58 @@
           parseFloat(document.getElementById("exp").value) || 0;
         const timePerDungeon =
           parseFloat(document.getElementById("time").value) || 0;
-        const glyphPerDungeon =
-          parseFloat(document.getElementById("tier").value) * 2 || 0;
+        const costPerDungeonValue =
+          parseFloat(document.getElementById("cost").value) || 0;
+
+        // Get the selected game's level data and max level
+        const isD4Selected = document.getElementById("d4Radio").checked;
+        const levelData = isD4Selected ? D4levelData : D2RlevelData;
+        const maxLevel = isD4Selected ? 300 : 99;
 
         const rows = document.querySelectorAll("tbody tr");
         for (const row of rows) {
           const levelRange = row.querySelector(".powerleveling").value;
+
+          // Clear columns if input is empty
+          if (!levelRange.trim()) {
+            row.querySelector(".cost").innerText = "";
+            row.querySelector(".runs").innerText = "";
+            row.querySelector(".time").innerText = "";
+            continue;
+          }
+
           const [lvlFromString, lvlToString] = levelRange.split("-");
           const lvlFrom = Number(lvlFromString);
           const lvlTo = Number(lvlToString);
 
           // validate input lvl from < lvl to
-          // Check if numbers and in data
           if (
             isNaN(lvlFrom) ||
             isNaN(lvlTo) ||
-            !levelData[lvlFrom - 1] ||
-            !levelData[lvlTo - 1] ||
+            lvlFrom < 1 ||
+            lvlTo > maxLevel ||
             lvlFrom > lvlTo
           ) {
-            // invalid class to input
+            // Handle validation errors as before...
             row.querySelector(".powerleveling").classList.add("invalid");
-            // Add span with error message if not already there
             if (!row.querySelector(".error")) {
               const span = document.createElement("span");
               span.classList.add("error");
-              // Error message depending on case
+              span.setAttribute("role", "alert");
               row.querySelector(".powerleveling").after(span);
             }
             const span = row.querySelector(".error");
             if (isNaN(lvlFrom) || isNaN(lvlTo)) {
-              span.innerText = "Only numbers seperated by - allowed e.g. 1-100";
-            } else if (!levelData[lvlFrom - 1] || !levelData[lvlTo - 1]) {
-              span.innerText = "MinLvl: 1 and MaxLvl: 100";
+              span.innerText =
+                "Please enter two numbers separated by a - (e.g., 1-60)";
+            } else if (lvlFrom < 1 || lvlTo > maxLevel) {
+              span.innerText = `Level range must be between 1 and ${maxLevel}`;
             } else if (lvlFrom > lvlTo) {
-              span.innerText = "MinLvl is greater than MaxLvl";
+              span.innerText = "End level must be higher than start level";
             }
+            row.querySelector(".cost").innerText = "";
+            row.querySelector(".runs").innerText = "";
+            row.querySelector(".time").innerText = "";
             continue;
           } else {
             row.querySelector(".powerleveling").classList.remove("invalid");
@@ -383,146 +811,320 @@
               row.querySelector(".error").remove();
             }
           }
+
           const lvlDataFrom = levelData[lvlFrom - 1];
           const lvlDataTo = levelData[lvlTo - 1];
           const expNeeded = lvlDataTo[2] - lvlDataFrom[2];
-          const totalRuns = Math.ceil(expNeeded / expPerDungeon);
+          let totalRuns = Math.ceil(expNeeded / expPerDungeon);
+          let totalTime = totalRuns * timePerDungeon;
 
-          let costPerDungeonValue =
-            parseFloat(document.getElementById("cost").value) || 0;
-          let costUnit = "";
-
-          const radioDiablo4 = document.getElementById("diablo4Radio");
-          const radioD2JSP = document.getElementById("d2jspRadio");
-
-          if (radioDiablo4.checked) {
-            costUnit = "m gold";
-          } else if (radioD2JSP.checked) {
-            costUnit = " fg";
+          // Add extra runs and time for D2R if range includes levels 1-25
+          if (!isD4Selected && lvlFrom < 25) {
+            // Add 7 extra runs
+            totalRuns += 7;
+            // Add 35 minutes
+            totalTime += 35;
           }
 
-          row.querySelector(".cost").innerText =
-            (totalRuns * costPerDungeonValue).toFixed(0) + costUnit;
-          row.querySelector(".runs").innerText = "~" + totalRuns;
-          row.querySelector(".glyphs").innerText =
-            totalRuns * glyphPerDungeon + " exp";
+          // Calculate total cost including extra runs for D2R
+          const totalCost = totalRuns * costPerDungeonValue;
 
-          totalTime = totalRuns * timePerDungeon;
-          hours = Math.floor(totalTime / 60);
-          minutes = totalTime % 60;
+          row.querySelector(".cost").innerText = totalCost.toFixed(0) + " fg";
+          row.querySelector(".runs").innerText = totalRuns;
+
+          let hours = Math.floor(totalTime / 60);
+          let minutes = Math.floor(totalTime % 60);
           row.querySelector(".time").innerText =
             (hours > 0 ? hours + " h " : "") + minutes + " m";
         }
       }
 
-      function initialize() {
-        // Calculate and set up listeners when the DOM is ready
-        document.addEventListener("DOMContentLoaded", () => {
-          setupListeners(); // Set up event listeners
-          calculate(); // Calculate the initial values
-          // Add event listener for adding rows
-          const addRowButton = document.querySelector(".add");
-          addRowButton.addEventListener("click", addRow);
-        });
-      }
-
-      // Save state to URL hash
       function saveStateToHash() {
-        const copyText = document.querySelectorAll("input");
+        const isD4 = document.getElementById("d4Radio").checked;
+        const gameValues = isD4 ? d4Values : d2rValues;
+
         let text = "";
-        for (const input of copyText) {
-          text += input.value + ";";
-        }
+        // Add the current game's values
+        text += `exp=${gameValues.exp};`;
+        text += `time=${gameValues.time};`;
+        text += `cost=${gameValues.cost};`;
 
-        const radioDiablo4 = document.getElementById("diablo4Radio");
-        const radioD2JSP = document.getElementById("d2jspRadio");
-        if (radioDiablo4.checked) {
-          text += "radio=diablo4;";
-        } else if (radioD2JSP.checked) {
-          text += "radio=d2jsp;";
-        }
+        // Add powerleveling values
+        document.querySelectorAll("input.powerleveling").forEach((input) => {
+          text += `pl=${input.value};`;
+        });
 
-        base64 = btoa(text);
-        // Set as hash
+        // Add game selection
+        text += `game=${isD4 ? "d4" : "d2r"};`;
+
+        const base64 = btoa(text);
         window.location.hash = base64;
       }
 
-      // Restore state from URL hash
       function restoreStateFromHash() {
         if (window.location.hash) {
           const hash = window.location.hash.substr(1);
           const decoded = atob(hash);
-          let values = decoded.split(";");
-          if (values[values.length - 1] === "") {
-            values.pop();
-          }
+          const values = decoded.split(";");
 
-          let inputs = document.querySelectorAll("input");
-          if (values.length > inputs.length) {
-            for (let i = 0; i < values.length - inputs.length - 1; i++) {
-              addRow();
-            }
-          }
-
-          inputs = document.querySelectorAll("input");
-          for (let i = 0; i < inputs.length; i++) {
-            inputs[i].value = values[i];
-          }
-
-          const radioDiablo4 = document.getElementById("diablo4Radio");
-          const radioD2JSP = document.getElementById("d2jspRadio");
+          // Find game type first
+          let isD4 = true;
           for (const value of values) {
-            if (value.startsWith("radio=")) {
-              const radioValue = value.substring(6);
-              if (radioValue === "diablo4") {
-                radioDiablo4.checked = true;
-              } else if (radioValue === "d2jsp") {
-                radioD2JSP.checked = true;
+            if (value.startsWith("game=")) {
+              isD4 = value.substring(5) === "d4";
+              if (isD4) {
+                document.getElementById("d4Radio").checked = true;
+              } else {
+                document.getElementById("d2rRadio").checked = true;
               }
+              break;
             }
           }
+
+          // Parse and store values
+          let plValues = [];
+          for (const value of values) {
+            if (value.startsWith("exp=")) {
+              if (isD4) d4Values.exp = value.substring(4);
+              else d2rValues.exp = value.substring(4);
+            } else if (value.startsWith("time=")) {
+              if (isD4) d4Values.time = value.substring(5);
+              else d2rValues.time = value.substring(5);
+            } else if (value.startsWith("cost=")) {
+              if (isD4) d4Values.cost = value.substring(5);
+              else d2rValues.cost = value.substring(5);
+            } else if (value.startsWith("pl=")) {
+              plValues.push(value.substring(3));
+            }
+          }
+
+          // Update UI with stored values
+          updateLabels(isD4);
+          updatePresetValues(isD4);
+
+          // Handle powerleveling rows
+          const currentRows = document.querySelectorAll("input.powerleveling");
+          // Add any missing rows
+          while (currentRows.length < plValues.length) {
+            addRow();
+          }
+
+          // Update powerleveling values
+          document
+            .querySelectorAll("input.powerleveling")
+            .forEach((input, index) => {
+              if (plValues[index]) {
+                input.value = plValues[index];
+              }
+            });
+
+          calculate();
+        } else {
+          // If no hash, set default values for D4 (since it's checked by default)
+          updatePresetValues(true, true);
+          calculate();
         }
       }
 
-      // Add event listener to the Copy Data button
+      function createShareableTable() {
+        // Create a simplified table for sharing
+        const table = document.createElement("table");
+        table.className = "border center-align";
+
+        // Add header
+        const thead = document.createElement("thead");
+        thead.innerHTML = `
+          <tr>
+            <th scope="col">Level Range</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col">Time to Complete</th>
+          </tr>
+        `;
+        table.appendChild(thead);
+
+        // Add body
+        const tbody = document.createElement("tbody");
+        document.querySelectorAll("tbody tr").forEach((row) => {
+          const levelRange = row.querySelector(".powerleveling").value;
+          const cost = row.querySelector(".cost").innerText;
+          const time = row.querySelector(".time").innerText;
+
+          // Only add rows that have valid input
+          if (levelRange && cost && time) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${levelRange}</td>
+              <td>${cost}</td>
+              <td>${time}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        });
+        table.appendChild(tbody);
+
+        return table;
+      }
+
+      function saveShareableStateToHash() {
+        const isD4 = document.getElementById("d4Radio").checked;
+        let text = "";
+
+        // Add game type
+        text += `game=${isD4 ? "d4" : "d2r"};`;
+
+        // Force a calculation to ensure values are up to date
+        calculate();
+
+        // Add only the level ranges, costs, and times
+        document.querySelectorAll("tbody tr").forEach((row) => {
+          const levelRange = row.querySelector(".powerleveling")?.value;
+          const cost = row.querySelector(".cost")?.innerText;
+          const time = row.querySelector(".time")?.innerText;
+
+          // Only add valid rows that have all values
+          if (levelRange && cost && time && levelRange.trim() !== "") {
+            // Remove any existing error messages or invalid states
+            if (
+              !row.querySelector(".error") &&
+              !row.querySelector(".powerleveling").classList.contains("invalid")
+            ) {
+              text += `entry=${levelRange}|${cost}|${time};`;
+            }
+          }
+        });
+
+        return btoa(text);
+      }
+
+      function createShareableView(hash) {
+        // Decode the hash
+        const decoded = atob(hash);
+        const values = decoded.split(";");
+
+        // Create container
+        const container = document.createElement("div");
+        container.className = "responsive dark";
+
+        // Add header with icons on both sides
+        const header = document.createElement("header");
+        header.className = "secondary-container";
+        header.innerHTML = `
+          <nav>
+            <button class="circle transparent" aria-label="Diablo icon">
+              <img class="responsive" src="icon.ico" alt="Diablo game icon" />
+            </button>
+            <h5 class="max center-align">Diablo Powerleveling Offer</h5>
+            <button class="circle transparent" aria-label="Diablo icon">
+              <img class="responsive" src="icon.ico" alt="Diablo game icon" />
+            </button>
+          </nav>
+        `;
+        container.appendChild(header);
+
+        // Create main content
+        const main = document.createElement("main");
+        main.className = "responsive";
+
+        // Create article
+        const article = document.createElement("article");
+        article.className = "fill";
+
+        // Create table
+        const table = document.createElement("table");
+        table.className = "border center-align";
+
+        // Add header
+        const thead = document.createElement("thead");
+        thead.innerHTML = `
+          <tr>
+            <th scope="col">Level Range</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col">Time to Complete</th>
+          </tr>
+        `;
+        table.appendChild(thead);
+
+        // Add body
+        const tbody = document.createElement("tbody");
+
+        // Process entries
+        values.forEach((value) => {
+          if (value.startsWith("entry=")) {
+            const [range, cost, time] = value.substring(6).split("|");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${range}</td>
+              <td>${cost}</td>
+              <td>${time}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        });
+
+        table.appendChild(tbody);
+        article.appendChild(table);
+        main.appendChild(article);
+        container.appendChild(main);
+
+        // Add dark theme class to body
+        document.body.className = "dark";
+
+        return container.outerHTML;
+      }
+
+      // Update the Copy Data button event listener
       document
         .getElementById("copyData")
-        .addEventListener("click", function () {
-          saveStateToHash();
+        .addEventListener("click", async () => {
+          // Force a calculation before creating the share link
+          calculate();
 
-          // Copy to clipboard
-          const el = document.createElement("textarea");
-          el.value = window.location.href;
-          document.body.appendChild(el);
-          el.select();
-          document.execCommand("copy");
-          document.body.removeChild(el);
+          // Create shareable URL with minimal data and timestamp
+          const shareableHash = saveShareableStateToHash();
+          const timestamp = Date.now(); // Add current timestamp
+          const shareableUrl = `${window.location.origin}${window.location.pathname}#share=${shareableHash}&t=${timestamp}`;
 
-          // Clear hash
-          window.location.hash = "";
+          try {
+            await navigator.clipboard.writeText(shareableUrl);
+            alert("Shareable link copied to clipboard!");
+          } catch (err) {
+            const el = document.createElement("textarea");
+            el.value = shareableUrl;
+            document.body.appendChild(el);
+            el.select();
+            try {
+              document.execCommand("copy");
+              alert("Shareable link copied to clipboard!");
+            } catch (err) {
+              alert("Failed to copy link. Please copy the URL manually.");
+            }
+            document.body.removeChild(el);
+          }
         });
 
-      // Restore state when the page loads
-      document.addEventListener("DOMContentLoaded", () => {
-        restoreStateFromHash();
-        // Set up event listeners for input changes
-        document.querySelectorAll("#userInput input").forEach((input) => {
-          input.addEventListener("keyup", saveStateToHash);
-        });
-        // Set up event listeners for radio button changes
-        document
-          .getElementById("diablo4Radio")
-          .addEventListener("change", saveStateToHash);
-        document
-          .getElementById("d2jspRadio")
-          .addEventListener("change", saveStateToHash);
-        // Set up event listeners for powerleveling input changes
-        document.querySelectorAll(".powerleveling").forEach((input) => {
-          input.addEventListener("keyup", saveStateToHash);
-        });
+      // Add a hash change listener to update the view when the URL changes
+      window.addEventListener("hashchange", function () {
+        if (window.location.hash.includes("#share=")) {
+          const hashParts = window.location.hash.split("&");
+          const hash = hashParts[0].substring(7); // Remove '#share=' prefix
+          document.body.innerHTML = createShareableView(hash);
+        } else {
+          restoreStateFromHash();
+          setupListeners();
+        }
       });
 
-      initialize();
+      // Update the DOMContentLoaded event listener (keep existing one)
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.hash.includes("#share=")) {
+          const hashParts = window.location.hash.split("&");
+          const hash = hashParts[0].substring(7); // Remove '#share=' prefix
+          document.body.innerHTML = createShareableView(hash);
+        } else {
+          restoreStateFromHash();
+          setupListeners();
+        }
+      });
     </script>
   </body>
 </html>
