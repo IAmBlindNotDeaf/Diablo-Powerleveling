@@ -1,0 +1,186 @@
+:root {
+  --neon-green: #39ff14;
+  --dark-blue: #0a1a2e;
+  --error-red: #ff5252;
+  --hover-blue: #1a2a4a;
+  --input-bg: rgba(10, 26, 46, 0.8);
+  --transition-speed: 0.3s;
+}
+
+/* Base styles */
+body {
+  color: var(--neon-green);
+  background-color: var(--dark-blue);
+  transition: background-color var(--transition-speed) ease;
+}
+
+/* Base text colors */
+h5,
+h6,
+span,
+label,
+a,
+th,
+td,
+input,
+select,
+button {
+  color: var(--neon-green) !important;
+  transition: color var(--transition-speed) ease;
+}
+
+/* Field labels */
+.field label,
+#expLabel,
+#costLabel,
+#timeLabel {
+  color: var(--neon-green) !important;
+  background-color: transparent !important;
+  text-shadow: 0 0 5px var(--neon-green);
+  transition: text-shadow var(--transition-speed) ease;
+}
+
+/* Background colors */
+header.secondary-container,
+article.fill,
+.card,
+table,
+.s12.m6,
+.row,
+.extend.square.fill {
+  background-color: var(--dark-blue) !important;
+  transition: background-color var(--transition-speed) ease;
+}
+
+/* Input and select styling */
+input,
+select {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--neon-green) !important;
+  transition: all var(--transition-speed) ease;
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 10px var(--neon-green);
+  outline: none;
+}
+
+/* Error styling */
+.error {
+  color: var(--error-red);
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 4px;
+  text-shadow: 0 0 5px var(--error-red);
+}
+
+tr {
+  position: relative;
+}
+
+.powerleveling.invalid {
+  border-color: var(--error-red) !important;
+  box-shadow: 0 0 10px var(--error-red);
+}
+
+td {
+  vertical-align: top;
+  padding-top: 8px;
+}
+
+/* recolor the radio:checked:before */
+.radio input:checked + span::before,
+.checkbox input:checked + span::before {
+  background-color: var(--neon-blue) !important;
+  color: var(--neon-green) !important;
+  box-shadow: none !important;
+}
+
+/* recolor the radio:unchecked:before */
+.radio input + span::before,
+.checkbox input + span::before {
+  background-color: var(--dark-blue) !important;
+  color: var(--neon-green) !important;
+  box-shadow: none !important;
+}
+
+/* Button hover effect */
+.extend.square.fill {
+  transition: all var(--transition-speed) ease;
+  color: var(--neon-green) !important;
+}
+
+.extend.square.fill:hover {
+  box-shadow: 0 0 10px var(--neon-green);
+  transform: translateY(-2px);
+}
+
+/* Dropdown styling */
+select option {
+  background-color: var(--dark-blue) !important;
+  color: var(--neon-green) !important;
+}
+
+select:focus option:checked {
+  background-color: var(--neon-green) !important;
+  color: var(--dark-blue) !important;
+}
+
+/* Table styling */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th {
+  text-shadow: 0 0 5px var(--neon-green);
+  border-bottom: 2px solid var(--neon-green);
+  text-align: center;
+  vertical-align: middle;
+}
+
+td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 8px;
+}
+
+/* Center the input fields in table cells */
+td .field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+td input {
+  text-align: center;
+}
+
+/* Center the delete button */
+td .extend.square.fill {
+  margin: 0 auto;
+  display: block;
+}
+
+/* Card styling */
+.card {
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .field label,
+  #expLabel,
+  #costLabel,
+  #timeLabel {
+    font-size: 0.9rem;
+  }
+
+  input,
+  select {
+    font-size: 0.9rem;
+  }
+}
