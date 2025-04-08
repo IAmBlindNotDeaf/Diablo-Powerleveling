@@ -3,23 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diablo Powerleveling</title>
+    <meta
+      name="description"
+      content="Diablo Powerleveling Calculator - Calculate experience, time, and cost for powerleveling in Diablo 4 and Diablo 2 Resurrected"
+    />
+    <title>Diablo Powerleveling Calculator</title>
 
     <link
       href="https://cdn.jsdelivr.net/npm/beercss@3.2.13/dist/cdn/beer.min.css"
       rel="stylesheet"
     />
+    <link href="diablo.css" rel="stylesheet" />
   </head>
 
   <body class="dark">
     <header class="secondary-container">
       <nav>
         <button class="circle transparent" aria-label="Diablo icon">
-          <img class="responsive" src="icon.ico" alt="Diablo game icon" />
+          <img
+            class="responsive"
+            src="icon.ico"
+            alt="Diablo game icon"
+            width="32"
+            height="32"
+          />
         </button>
-        <h5 class="max center-align">Diablo Powerleveling Calculator</h5>
+        <h5 class="max center-align">Diablo 4 Powerleveling Calculator</h5>
         <button class="circle transparent" aria-label="Diablo icon">
-          <img class="responsive" src="icon.ico" alt="Diablo game icon" />
+          <img
+            class="responsive"
+            src="icon.ico"
+            alt="Diablo game icon"
+            width="32"
+            height="32"
+          />
         </button>
       </nav>
     </header>
@@ -48,7 +65,6 @@
                       type="radio"
                       name="game-type"
                       value="d4"
-                      checked
                     />
                     <span>Diablo 4</span>
                   </label>
@@ -58,6 +74,7 @@
                       type="radio"
                       name="game-type"
                       value="d2r"
+                      checked
                     />
                     <span>Diablo 2 Resurrected</span>
                   </label>
@@ -70,7 +87,7 @@
                   >
                     <select id="partySize" class="border">
                       <option value="1">Party Size: 1</option>
-                      <option value="2">Party Size: 2</option>
+                      <option value="2" selected>Party Size: 2</option>
                       <option value="3">Party Size: 3</option>
                       <option value="4">Party Size: 4</option>
                       <option value="5">Party Size: 5</option>
@@ -95,37 +112,37 @@
                     </select>
                   </div>
                 </div>
-              </div>
-              <div class="row" id="d2rCheckboxContainer" style="display: none">
-                <div class="s12 m6">
-                  <label class="checkbox">
-                    <input id="expShrine" type="checkbox" />
-                    <span>Exp Shrine (50%)</span>
-                  </label>
-                </div>
-                <div class="s12 m6">
-                  <label class="checkbox">
-                    <input id="ondalsWisdom" type="checkbox" />
-                    <span>Ondal's Wisdom (5%)</span>
-                  </label>
+                <div
+                  class="row"
+                  id="d2rCheckboxContainer"
+                  style="display: none"
+                >
+                  <div class="s12 m6">
+                    <label class="checkbox">
+                      <input id="expShrine" type="checkbox" />
+                      <span>Exp Shrine (50%)</span>
+                    </label>
+                  </div>
+                  <div class="s12 m6">
+                    <label class="checkbox">
+                      <input id="ondalsWisdom" type="checkbox" />
+                      <span>Ondal's Wisdom (5%)</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </nav>
           </div>
-          <div class="row" style="margin-bottom: 20px">
+          <div class="row">
             <div class="field label border fill small">
               <input
                 id="exp"
                 type="number"
                 min="0"
                 step="100000"
-                aria-describedby="expHelper"
+                aria-label="Experience per run"
               />
               <label id="expLabel" for="exp">Experience per Pit 100</label>
-            </div>
-            <div class="field label border fill small">
-              <input id="time" type="number" />
-              <label id="timeLabel" for="time">Duration per Pit 100</label>
             </div>
             <div class="field label border fill small">
               <input
@@ -133,16 +150,29 @@
                 type="number"
                 min="0"
                 step="10"
-                aria-describedby="costHelper"
+                aria-label="Cost per run"
               />
               <label id="costLabel" for="cost">Cost per Pit 100</label>
+            </div>
+            <div class="field label border fill small">
+              <input
+                id="time"
+                type="number"
+                min="0"
+                step="1"
+                aria-label="Duration per run"
+              />
+              <label id="timeLabel" for="time">Duration per Pit 100</label>
             </div>
           </div>
         </div>
         <table class="border center-align card">
           <thead>
             <tr>
-              <th scope="col" title="Enter level range (D4: 1-300, D2R: 1-99)">
+              <th
+                scope="col"
+                title="Enter level range and press enter (D4: 1-300, D2R: 1-99)"
+              >
                 Level Range
               </th>
               <th scope="col" title="Number of runs needed">Required Runs</th>
