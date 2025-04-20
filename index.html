@@ -209,15 +209,6 @@
             </tr>
           </tbody>
         </table>
-
-        <!-- Add signature section -->
-        <div class="center-align" style="margin-top: 2rem">
-          <img
-            id="signatureGif"
-            alt="Signature GIF"
-            style="max-width: 100%; height: auto"
-          />
-        </div>
       </article>
     </main>
 
@@ -231,24 +222,5 @@
     ></script>
     <script src="diabloData.js"></script>
     <script src="calculator.js"></script>
-    <script>
-      // Function to randomly select and display a GIF
-      function displayRandomGif() {
-        const gifs = [
-          "Illidan Sig D2jSP.gif",
-          "Illidan Stormrage.gif",
-          "Illidan.gif",
-        ];
-        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-        const imgElement = document.getElementById("signatureGif");
-        imgElement.src = randomGif;
-      }
-
-      // Display random GIF on page load
-      displayRandomGif();
-
-      // Change GIF every 10 seconds (optional)
-      setInterval(displayRandomGif, 10000);
-    </script>
   </body>
 </html>
