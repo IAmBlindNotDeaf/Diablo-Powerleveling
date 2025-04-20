@@ -14,6 +14,13 @@
       rel="stylesheet"
     />
     <link href="diablo.css" rel="stylesheet" />
+    <script>
+      // Check if this is a signature request
+      if (window.location.search.includes("signature")) {
+        const gifs = ["Illidan Sig D2jSP.gif", "Illidan Stormrage.gif"];
+        window.location.replace(gifs[Math.floor(Math.random() * gifs.length)]);
+      }
+    </script>
   </head>
 
   <body class="dark">
@@ -209,6 +216,15 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Add signature section -->
+        <div class="center-align" style="margin-top: 2rem">
+          <img
+            id="signatureGif"
+            alt="Signature GIF"
+            style="max-width: 100%; height: auto"
+          />
+        </div>
       </article>
     </main>
 
@@ -222,5 +238,23 @@
     ></script>
     <script src="diabloData.js"></script>
     <script src="calculator.js"></script>
+    <script>
+      // Only run this if it's not a signature request
+      if (!window.location.search.includes("signature")) {
+        // Function to randomly select and display a GIF
+        function displayRandomGif() {
+          const gifs = ["Illidan Sig D2jSP.gif", "Illidan Stormrage.gif"];
+          const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+          const imgElement = document.getElementById("signatureGif");
+          imgElement.src = randomGif;
+        }
+
+        // Display random GIF on page load
+        displayRandomGif();
+
+        // Change GIF every 10 seconds
+        setInterval(displayRandomGif, 10000);
+      }
+    </script>
   </body>
 </html>
